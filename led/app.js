@@ -52,7 +52,7 @@ mongoose.connection.on('error', function() {
 /**
  * Express configuration.
  */
-//app.set('port', process.env.PORT || 80);
+app.set('port', process.env.PORT || 11342);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(compress());
@@ -200,8 +200,8 @@ app.use(errorHandler());
 // ***  defered to subdomain router in parent
 // ***
 
-// app.listen(app.get('port'), function() {
-//   console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
-// });
+app.listen(app.get('port'), function() {
+  console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
+});
 
 module.exports = app;
