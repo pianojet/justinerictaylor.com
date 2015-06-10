@@ -13,8 +13,8 @@
  * below via "//= require [filename]".
  */
 
-//= require lib/jquery-2.1.3.min
-//= require lib/bootstrap.min
-//= require lib/LEDStrip/ledstrip
-//= require lib/LEDStrip/ws2812
-//= require main
+//= require lib/lodash/dist/lodash.js
+//= require lib/angular/angular.min.js
+//= require lib/angular-bootstrap/ui-bootstrap.js
+//= require app
+
