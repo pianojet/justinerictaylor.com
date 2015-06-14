@@ -2,10 +2,13 @@ extends layout
 
 block content
   h1 Fire Prototype
-  p.lead Tests for fire logic
-  hr
-  .row
-    .col-sm-6
-      h2 Arduino LED Array
-        div.fire-container-1
-          div.mylights
+  div(ng-controller="LEDController")
+    p.lead Tests for fire logic
+    hr
+    .row
+      .col-sm-6
+        h2 Arduino LED Array
+          div.fire-container-1
+            div.mylights
+              p Controller: {{controller}}
+              p Factory: {{factory}}
