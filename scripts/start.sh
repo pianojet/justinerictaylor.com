@@ -13,7 +13,9 @@ export NVM_DIR="/root/.nvm"
 nvm use v0.10.38
 
 cd $APP1
+gulp bower
 node app.js > $BASEAPP/led.log 2> $BASEAPP/led.log &
 
 cd $APP2
+gulp bower
 node app.js > $BASEAPP/bb8.log 2> $BASEAPP/bb8.log &
