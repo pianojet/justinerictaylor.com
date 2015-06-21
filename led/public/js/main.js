@@ -68,20 +68,6 @@ $(document).ready(function() {
       return colors;
     }
 
-    function getColors2()
-    {
-      var colors = [];
-      for (var i=0; i<maxLights; i++)
-      {
-          colors[i] = [50, 50, 50];
-      }
-      colors[0] = [0, 0, 50];
-      colors[1] = [0, 0, 100];
-      colors[2] = [0, 0, 150];
-      colors[3] = [0, 0, 200];
-      colors[4] = [0, 0, 250];
-      return colors;
-    }
 
     var pallate = [
       [0, 0, 0], // 0
@@ -209,8 +195,6 @@ $(document).ready(function() {
 
     var maxLights = pallate.length;
     var container = $('.mylights')[0]; // Container DIV in the page
-    // var colors = getColors2();
-
 
     /**
      * Animation loops. Manipulate the buffer, and send values.
