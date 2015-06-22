@@ -7,13 +7,12 @@ app.controller('LEDController',[ '$scope', 'firePallate', 'Flame', 'FirePit',
     var container = $('.mylights')[0]; // Container DIV in the page
     var rAF_id = requestAnimationFrame(animate);
     var burnedOut = new Flame(32);
-    var flame01 = new Flame(7);
-    var flame02 = new Flame(5, 2);
+    var flame01 = new Flame(13, 0.2, 1.0);
+    // var flame02 = new Flame(11, 0.1, 0.9);
+    // var flame03 = new Flame(11, 0.5, 1.0);
     var firePit = new FirePit(32, firePallate);
 
     firePit.setFlame(burnedOut);
-    firePit.setFlame(flame01);
-    firePit.setFlame(flame02)
 
     var strip = LEDstrip(container, firePit.getSize()) // Initialize
       .setcolors(firePit.getColors())  // chain commands
@@ -28,8 +27,10 @@ app.controller('LEDController',[ '$scope', 'firePallate', 'Flame', 'FirePit',
 
       flame01.next();
       flame02.next();
+      flame03.next();
       firePit.setFlame(flame01);
-      firePit.setFlame(flame02, 10);
+      firePit.mergeFlame(flame02, 25);
+      firePit.mergeFlame(flame03, 20);
       try {
         strip.buffer = firePit.getColors();
         strip.send();
@@ -43,13 +44,27 @@ app.controller('LEDController',[ '$scope', 'firePallate', 'Flame', 'FirePit',
 
 app.factory('Flame', function() {
 
-      function Flame(width, rage) {
-        if (typeof rage == "undefined" || rage == null) rage = 1;
+      function Flame(width, rage, maxIntense) {
+        /*
+         * width: width in cells
+         * rage:  speed of fire growth (%)
+         * maxIntense: max brightness/intensity (%)
+         *
+         *
+         *
+         *
+         *
+         */
+        if (typeof rage == "undefined" || rage == null) rage = 1.0;
+        if (typeof maxIntense == "undefined" || maxIntense == null) maxIntense = 1.0;
         this.width = width;
         this.amplitudePercent = 0;
         this.grow = true;
         this.rage = rage;
+        this._rage_inc = 15*(this.rage);
+        this.maxIntense = maxIntense;
         this.flameIntensities = [];
+        this._cycles = 0;
         this._init();
       }
 
@@ -62,20 +77,31 @@ app.factory('Flame', function() {
         }
       };
 
+      Flame.prototype._gaussian = function(x) {
+        // var m = Math.sqrt(this.width) * Math.sqrt(2 * Math.PI);
+        var m = 6.0 - (5.0*this.maxIntense);// Math.sqrt(2 * Math.PI);
+        var e = Math.exp(-Math.pow(x - (this.width/2.5), 2) / (2 * this.width));
+        return e / m;
+      };
+
       Flame.prototype._step = function() {
         if (this.grow)
-          this.amplitudePercent += this.rage;
+          this.amplitudePercent += this._rage_inc;
         else
-          this.amplitudePercent -= this.rage;
+          this.amplitudePercent -= this._rage_inc;
         if (this.amplitudePercent >= 100) this.grow = false;
-        if (this.amplitudePercent <= 0) this.grow = true;
+        if (this.amplitudePercent <= 0) {
+          this.grow = true;
+          this._cycles += 1;
+        }
       };
 
       Flame.prototype._newIntensities = function() {
         self = this;
         for (var i=0; i<self.width; i++)
         {
-          percent = self.amplitudePercent / 100;
+          percent = self._gaussian(i)*(self.amplitudePercent/100);
+          // percent = self.amplitudePercent / 100;
           self.flameIntensities[i] = percent;
         }        
       }
@@ -87,6 +113,10 @@ app.factory('Flame', function() {
 
       Flame.prototype.getIntensities = function() {
         return this.flameIntensities;
+      };
+
+      Flame.prototype.getCycles = function() {
+        return this._cycles;
       };
 
       return Flame;
@@ -109,20 +139,25 @@ app.factory('FirePit', function() {
         self.pallateIndexSpan = [];
         for (var i=0; i<self.getSize(); i++)
         {
-            self.colorValueSpan.push([150, 150, 150]);
+            self.colorValueSpan.push([0, 0, 0]);
             self.intensityValueSpan.push(0.0);
             self.pallateIndexSpan.push(0);
         }
       };
+
+      //FirePit.p
 
       FirePit.prototype._mergeIntensities = function(intensities, offset) {
         self = this;
         intensities.forEach(function(val, idx)
         {
           if ((offset+idx) < self.intensityValueSpan.length)
-            self.intensityValueSpan[offset+idx] = val;
+          {
+            currentI = self.intensityValueSpan[offset+idx];
+            newI = val;
+            self.intensityValueSpan[offset+idx] = (currentI+newI)/2;
+          }
         });
-
       };
 
       FirePit.prototype._updateColors = function() {
@@ -144,6 +179,7 @@ app.factory('FirePit', function() {
 
       FirePit.prototype.setFlame = function(flame, offset) {
         self = this;
+        self._init();
         if (typeof offset == "undefined" || offset == null) offset = 0;
         flame.getIntensities().forEach(function(val, idx)
         {
