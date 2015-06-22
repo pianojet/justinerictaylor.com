@@ -26,11 +26,11 @@ app.controller('LEDController',[ '$scope', 'firePallate', 'Flame', 'FirePit',
       // colors = assignColorArrayToColors(pallate)(colors);
 
       flame01.next();
-      flame02.next();
-      flame03.next();
+      // flame02.next();
+      // flame03.next();
       firePit.setFlame(flame01);
-      firePit.mergeFlame(flame02, 25);
-      firePit.mergeFlame(flame03, 20);
+      // firePit.mergeFlame(flame02, 25);
+      // firePit.mergeFlame(flame03, 20);
       try {
         strip.buffer = firePit.getColors();
         strip.send();
