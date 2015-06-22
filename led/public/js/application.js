@@ -19,4 +19,5 @@
 //= require lib/lodash/dist/lodash.js
 //= require lib/angular/angular.min.js
 //= require lib/angular-bootstrap/ui-bootstrap.js
+//= require lib/angular-rangeslider-directive/angular-range-slider.min.js
 //= require app.js

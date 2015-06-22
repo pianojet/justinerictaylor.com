@@ -1,4 +1,7 @@
-app = angular.module('LEDApp',[])
+app = angular.module('LEDApp',[
+  "ui.bootstrap",
+  "angularRangeSlider"
+])
 
 
 app.controller('LEDController',[ '$scope', 'firePallate', 'Flame', 'FirePit',
@@ -8,15 +11,71 @@ app.controller('LEDController',[ '$scope', 'firePallate', 'Flame', 'FirePit',
     var rAF_id = requestAnimationFrame(animate);
     var burnedOut = new Flame(32);
     var flame01 = new Flame(13, 0.2, 1.0);
-    // var flame02 = new Flame(11, 0.1, 0.9);
-    // var flame03 = new Flame(11, 0.5, 1.0);
+    var flame02 = new Flame(11, 0.1, 0.9);
+    var flame03 = new Flame(11, 0.5, 1.0);
     var firePit = new FirePit(32, firePallate);
 
-    firePit.setFlame(burnedOut);
+
+    $scope.numMaxFlamesMin = 1;
+    $scope.numMaxFlamesMax = 7;
+    $scope.numMaxFlames = 7;
+
+    $scope.sizeRangeMin = 3;
+    $scope.sizeRangeMax = 21;
+    $scope.sizeRangeLow = 7;
+    $scope.sizeRangeHigh = 13;
+
+    $scope.rageRangeMin = 10;
+    $scope.rageRangeMax = 100;
+    // $scope.rageRange = {"low": 20, "high": 50};
+    $scope.rageRangeLow = 20;
+    $scope.rageRangeHigh = 50;
+
+    $scope.maxIntenseRangeMin = 50;
+    $scope.maxIntenseRangeMax = 100;
+    $scope.maxIntenseRangeLow = 95;
+    $scope.maxIntenseRangeHigh = 100;
+
+    $scope.strengthRangeMin = 1;
+    $scope.strengthRangeMax = 2;
+    $scope.strengthRangeLow = 1;
+    $scope.strengthRangeHigh = 2;
+
+    $scope.offsetRange = {"min": 0, "max": 31};
+    //$scope.offsetRange.Max = 31;
+    $scope.offsetRangeLow = 0;
+    $scope.offsetRangeHigh = 31;
+    // var strengthRange = [];
+
+    firePit.pushFlame(flame01);
+    // firePit.pushFlame(flame02, 5);
+    // firePit.pushFlame(flame03, 25);
 
     var strip = LEDstrip(container, firePit.getSize()) // Initialize
       .setcolors(firePit.getColors())  // chain commands
       .send();
+
+
+    function addFlame(pit) {
+      rSize = Math.round((Math.random() * ($scope.sizeRangeHigh-$scope.sizeRangeLow) + $scope.sizeRangeLow));
+      rRage = Math.round((Math.random() * ($scope.rageRangeHigh-$scope.rageRangeLow) + $scope.rageRangeLow))/100;
+      rIntense = Math.round((Math.random() * ($scope.maxIntenseRangeHigh-$scope.maxIntenseRangeLow) + $scope.maxIntenseRangeLow))/100;
+      rStrength = Math.round((Math.random() * ($scope.strengthRangeHigh-$scope.strengthRangeLow) + $scope.strengthRangeLow))/100;
+      rOffset = Math.round((Math.random() * ($scope.offsetRangeHigh-$scope.offsetRangeLow) + $scope.offsetRangeLow));
+      f = new Flame(rSize, rRage, rIntense, rStrength);
+      // f = new Flame(13, 0.5, 1.0, 1);
+      pit.pushFlame(f, rOffset);
+      // console.log("rOffset:");
+      // console.log(rOffset);
+      // console.log("rRage: ");
+      // console.log(rRage);
+      // console.log("rIntense: ");
+      // console.log(rIntense);
+      // console.log("rStrength: ");
+      // console.log(rStrength);
+
+      return pit;
+    }
 
     function animate() {
       rAF_id = requestAnimationFrame(animate);
@@ -25,10 +84,18 @@ app.controller('LEDController',[ '$scope', 'firePallate', 'Flame', 'FirePit',
       // colors = getRandomColors(colors);
       // colors = assignColorArrayToColors(pallate)(colors);
 
-      flame01.next();
+
+      while (firePit.getFlameCount() < $scope.numMaxFlames) {
+        firePit = addFlame(firePit);
+      }
+
+      firePit.fire();
+      // firePit._stepFlames();
+      // firePit._lightFlames();
+      // flame01.next();
       // flame02.next();
       // flame03.next();
-      firePit.setFlame(flame01);
+      // firePit.setFlame(flame01);
       // firePit.mergeFlame(flame02, 25);
       // firePit.mergeFlame(flame03, 20);
       try {
@@ -44,12 +111,12 @@ app.controller('LEDController',[ '$scope', 'firePallate', 'Flame', 'FirePit',
 
 app.factory('Flame', function() {
 
-      function Flame(width, rage, maxIntense) {
+      function Flame(width, rage, maxIntense, strength) {
         /*
          * width: width in cells
          * rage:  speed of fire growth (%)
          * maxIntense: max brightness/intensity (%)
-         *
+         * strength: how many cycles fire will ebb
          *
          *
          *
@@ -57,15 +124,18 @@ app.factory('Flame', function() {
          */
         if (typeof rage == "undefined" || rage == null) rage = 1.0;
         if (typeof maxIntense == "undefined" || maxIntense == null) maxIntense = 1.0;
+        if (typeof strength == "undefined" || strength == null) strength = 1;
         this.width = width;
         this.amplitudePercent = 0;
         this.grow = true;
         this.rage = rage;
         this._rage_inc = 15*(this.rage);
         this.maxIntense = maxIntense;
+        this.strength = strength;
         this.flameIntensities = [];
         this._cycles = 0;
         this._init();
+        this._dead = false;
       }
 
       Flame.prototype._init = function() {
@@ -93,6 +163,7 @@ app.factory('Flame', function() {
         if (this.amplitudePercent <= 0) {
           this.grow = true;
           this._cycles += 1;
+          if (this._cycles >= this.strength) this._dead = true;
         }
       };
 
@@ -119,6 +190,10 @@ app.factory('Flame', function() {
         return this._cycles;
       };
 
+      Flame.prototype.isDead = function() {
+        return this._dead;
+      };
+
       return Flame;
 
 });
@@ -130,6 +205,8 @@ app.factory('FirePit', function() {
         this.pallate = pallate;
         this._size = size;
         this._init();
+        this._flames = [];
+        this._flameOffsets = [];
       }
 
       FirePit.prototype._init = function() {
@@ -145,7 +222,50 @@ app.factory('FirePit', function() {
         }
       };
 
-      //FirePit.p
+      FirePit.prototype.pushFlame = function(flame, offset) {
+        if (typeof offset == "undefined" || offset == null) offset = 0;
+        this._flames.push(flame);
+        this._flameOffsets.push(offset);
+      }
+
+      FirePit.prototype._stepFlames = function() {
+        for (var i=0; i<this._flames.length; i++) {
+          this._flames[i].next();
+        }
+      }
+
+      // FirePit.prototype._removeFlame = function(flame) {
+      //   self = this;
+      //   for (var i=0; i<this._flames.length; i++) {
+      //     if (this._flames[i] == flame) {
+      //       this.
+      //     }
+      //   }
+      // }
+
+      FirePit.prototype._cleanFlames = function() {
+        self = this;
+        for (var i=0; i<this._flames.length; i++) {
+          if (self._flames[i].isDead()) {
+            self._flames.splice(i, 1);
+            self._flameOffsets.splice(i, 1);
+          }
+        }        
+      }
+
+      FirePit.prototype._lightFlames = function() {
+        self = this;
+        if (this._flames.length > 0) this.setFlame(this._flames[0], this._flameOffsets[0]);
+        for (var i=1; i<self._flames.length; i++) {
+          this.mergeFlame(this._flames[i], this._flameOffsets[i]);
+        } 
+      }
+
+      FirePit.prototype.fire = function() {
+        this._cleanFlames();
+        this._stepFlames();
+        this._lightFlames();
+      }
 
       FirePit.prototype._mergeIntensities = function(intensities, offset) {
         self = this;
@@ -206,6 +326,10 @@ app.factory('FirePit', function() {
 
       FirePit.prototype.getSize = function() {
         return this._size;
+      };
+
+      FirePit.prototype.getFlameCount = function() {
+        return this._flames.length;
       };
 
       return FirePit;

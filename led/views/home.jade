@@ -45,3 +45,12 @@ block content
               div.label-led 31
 
             div.mylights
+
+    .row
+      .col-sm-6        
+        table
+          tr
+            td Rage:
+            td.slider-cell
+              //- div(range-slider min="rageRangeMin" max="rageRangeMax" modal-min="rageRangeLow" modal-max="rageRangeHigh")
+              div(range-slider floor="0" ceiling="100" step="1" precision="2" ng-modal-low="rageRangeLow" ng-modal-high="rageRangeHigh")
