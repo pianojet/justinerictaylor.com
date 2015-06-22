@@ -14,10 +14,11 @@
  */
 
 //= require lib/jquery-2.1.3.min.js
+//= require lib/jquery-ui/ui/minified/jquery-ui.min.js
 //= require lib/LEDStrip/ledstrip
 //= require lib/LEDStrip/ws2812
 //= require lib/lodash/dist/lodash.js
 //= require lib/angular/angular.min.js
 //= require lib/angular-bootstrap/ui-bootstrap.js
-//= require lib/angular-rangeslider-directive/angular-range-slider.min.js
+//= require lib/angular-ui-slider/src/slider.js
 //= require app.js

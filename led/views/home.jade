@@ -47,10 +47,60 @@ block content
             div.mylights
 
     .row
-      .col-sm-6        
-        table
+      .col-sm-12       
+        table.table.table-bordered
           tr
-            td Rage:
+            td.name-label Flame Count:
             td.slider-cell
-              //- div(range-slider min="rageRangeMin" max="rageRangeMax" modal-min="rageRangeLow" modal-max="rageRangeHigh")
-              div(range-slider floor="0" ceiling="100" step="1" precision="2" ng-modal-low="rageRangeLow" ng-modal-high="rageRangeHigh")
+              //- div(range-slider orientation="horizontal" min="0" max="100" modal-min="30" modal-max="80" prevent-equal-min-max="true")
+              //- div(range-slider floor="0" ceiling="100" step="1" precision="2" ng-modal-low="20" ng-modal-high="80")
+              div(ui-slider="{range: false}" step="1" min="{{numFlames.min}}" max="{{numFlames.max}}" ng-model="numFlames.level")
+            td.data-label {{numFlames.level}}
+            td Designates number of flames to allow active simutaneously.
+
+          tr
+            td.name-label Flame Size:
+            td.slider-cell
+              //- div(range-slider orientation="horizontal" min="0" max="100" modal-min="30" modal-max="80" prevent-equal-min-max="true")
+              //- div(range-slider floor="0" ceiling="100" step="1" precision="2" ng-modal-low="20" ng-modal-high="80")
+              div(ui-slider="{range: true}" step="1" min="{{fSize.min}}" max="{{fSize.max}}" ng-model="fSize.range")
+            td.data-label {{fSize.range}}
+            td Range of possible values that govern how large the flames are.
+
+          tr
+            td.name-label Rage (Speed):
+            td.slider-cell
+              //- div(range-slider orientation="horizontal" min="0" max="100" modal-min="30" modal-max="80" prevent-equal-min-max="true")
+              //- div(range-slider floor="0" ceiling="100" step="1" precision="2" ng-modal-low="20" ng-modal-high="80")
+              div(ui-slider="{range: true}" step="1" min="{{rageRange.min}}" max="{{rageRange.max}}" ng-model="rageRange.range")
+            td.data-label {{rageRange.range}}
+            td Range of possible speeds that govern how fast flames grow and shrink.
+
+          tr
+            td.name-label Intensity:
+            td.slider-cell
+              //- div(range-slider orientation="horizontal" min="0" max="100" modal-min="30" modal-max="80" prevent-equal-min-max="true")
+              //- div(range-slider floor="0" ceiling="100" step="1" precision="2" ng-modal-low="20" ng-modal-high="80")
+              div(ui-slider="{range: true}" step="1" min="{{maxIntense.min}}" max="{{maxIntense.max}}" ng-model="maxIntense.range")
+            td.data-label {{maxIntense.range}}
+            td Range of possible levels that govern how bright the flames can get.
+
+          tr
+            td.name-label Strength:
+            td.slider-cell
+              //- div(range-slider orientation="horizontal" min="0" max="100" modal-min="30" modal-max="80" prevent-equal-min-max="true")
+              //- div(range-slider floor="0" ceiling="100" step="1" precision="2" ng-modal-low="20" ng-modal-high="80")
+              div(ui-slider="{range: true}" step="1" min="{{strength.min}}" max="{{strength.max}}" ng-model="strength.range")
+            td.data-label {{strength.range}}
+            td Range of possible values that govern the maximum of times (cycles) individual flames will flame up.
+
+          tr
+            td.name-label Placement:
+            td.slider-cell
+              //- div(range-slider orientation="horizontal" min="0" max="100" modal-min="30" modal-max="80" prevent-equal-min-max="true")
+              //- div(range-slider floor="0" ceiling="100" step="1" precision="2" ng-modal-low="20" ng-modal-high="80")
+              div(ui-slider="{range: true}" step="1" min="{{offset.min}}" max="{{offset.max}}" ng-model="offset.range")
+            td.data-label {{offset.range}}
+            td Values that define a window inside the LED Array flames are allowed to appear (usually will be the entire LED Array).
+
+

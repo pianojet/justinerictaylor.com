@@ -1,6 +1,6 @@
 app = angular.module('LEDApp',[
   "ui.bootstrap",
-  "angularRangeSlider"
+  "ui.slider"
 ])
 
 
@@ -16,35 +16,35 @@ app.controller('LEDController',[ '$scope', 'firePallate', 'Flame', 'FirePit',
     var firePit = new FirePit(32, firePallate);
 
 
-    $scope.numMaxFlamesMin = 1;
-    $scope.numMaxFlamesMax = 7;
-    $scope.numMaxFlames = 7;
+    $scope.numFlames = {};
+    $scope.numFlames.level = 9
+    $scope.numFlames.min = 1;
+    $scope.numFlames.max = 12;
 
-    $scope.sizeRangeMin = 3;
-    $scope.sizeRangeMax = 21;
-    $scope.sizeRangeLow = 7;
-    $scope.sizeRangeHigh = 13;
+    $scope.fSize = {};
+    $scope.fSize.range = [4, 10];
+    $scope.fSize.min = 3;
+    $scope.fSize.max = 30;
 
-    $scope.rageRangeMin = 10;
-    $scope.rageRangeMax = 100;
-    // $scope.rageRange = {"low": 20, "high": 50};
-    $scope.rageRangeLow = 20;
-    $scope.rageRangeHigh = 50;
+    $scope.rageRange = {};
+    $scope.rageRange.range = [20, 50];
+    $scope.rageRange.min = 10;
+    $scope.rageRange.max = 100;
 
-    $scope.maxIntenseRangeMin = 50;
-    $scope.maxIntenseRangeMax = 100;
-    $scope.maxIntenseRangeLow = 95;
-    $scope.maxIntenseRangeHigh = 100;
+    $scope.maxIntense = {};
+    $scope.maxIntense.range = [90, 100];
+    $scope.maxIntense.min = 50;
+    $scope.maxIntense.max = 100;
 
-    $scope.strengthRangeMin = 1;
-    $scope.strengthRangeMax = 2;
-    $scope.strengthRangeLow = 1;
-    $scope.strengthRangeHigh = 2;
+    $scope.strength = {};
+    $scope.strength.range = [1, 2];
+    $scope.strength.min = 1;
+    $scope.strength.max = 3;
 
-    $scope.offsetRange = {"min": 0, "max": 31};
-    //$scope.offsetRange.Max = 31;
-    $scope.offsetRangeLow = 0;
-    $scope.offsetRangeHigh = 31;
+    $scope.offset = {};
+    $scope.offset.range = [0, 32];
+    $scope.offset.min = 0;
+    $scope.offset.max = 32;
     // var strengthRange = [];
 
     firePit.pushFlame(flame01);
@@ -57,11 +57,11 @@ app.controller('LEDController',[ '$scope', 'firePallate', 'Flame', 'FirePit',
 
 
     function addFlame(pit) {
-      rSize = Math.round((Math.random() * ($scope.sizeRangeHigh-$scope.sizeRangeLow) + $scope.sizeRangeLow));
-      rRage = Math.round((Math.random() * ($scope.rageRangeHigh-$scope.rageRangeLow) + $scope.rageRangeLow))/100;
-      rIntense = Math.round((Math.random() * ($scope.maxIntenseRangeHigh-$scope.maxIntenseRangeLow) + $scope.maxIntenseRangeLow))/100;
-      rStrength = Math.round((Math.random() * ($scope.strengthRangeHigh-$scope.strengthRangeLow) + $scope.strengthRangeLow))/100;
-      rOffset = Math.round((Math.random() * ($scope.offsetRangeHigh-$scope.offsetRangeLow) + $scope.offsetRangeLow));
+      rSize = Math.round((Math.random() * ($scope.fSize.range[1]-$scope.fSize.range[0]) + $scope.fSize.range[0]));
+      rRage = Math.round((Math.random() * ($scope.rageRange.range[1]-$scope.rageRange.range[0]) + $scope.rageRange.range[0]))/100;
+      rIntense = Math.round((Math.random() * ($scope.maxIntense.range[1]-$scope.maxIntense.range[0]) + $scope.maxIntense.range[0]))/100;
+      rStrength = Math.round((Math.random() * ($scope.strength.range[1]-$scope.strength.range[0]) + $scope.strength.range[0]));
+      rOffset = Math.round((Math.random() * ($scope.offset.range[1]-$scope.offset.range[0]) + $scope.offset.range[0]));
       f = new Flame(rSize, rRage, rIntense, rStrength);
       // f = new Flame(13, 0.5, 1.0, 1);
       pit.pushFlame(f, rOffset);
@@ -85,7 +85,7 @@ app.controller('LEDController',[ '$scope', 'firePallate', 'Flame', 'FirePit',
       // colors = assignColorArrayToColors(pallate)(colors);
 
 
-      while (firePit.getFlameCount() < $scope.numMaxFlames) {
+      while (firePit.getFlameCount() < $scope.numFlames.level) {
         firePit = addFlame(firePit);
       }
 
@@ -338,46 +338,88 @@ app.factory('FirePit', function() {
 
 
 app.constant('firePallate',
-  [
-    [0, 0, 0], // 0
-    [10, 0, 0],
-    [25, 0, 0],
-    [50, 0, 0],
+  (function () {
+    range01 = [
+      [0, 0, 0], // 0
+      [10, 0, 0],
+      [25, 0, 0],
+      [50, 0, 0],
 
-    [75, 0, 0], // 4
-    [100, 0, 0],
-    [125, 0, 0],
-    [150, 0, 0],
+      [75, 0, 0], // 4
+      [100, 0, 0],
+      [125, 0, 0],
+      [150, 0, 0],
 
-    [175, 0, 0], // 8
-    [200, 0, 0],
-    [225, 0, 0],
-    [250, 25, 0],
+      [175, 0, 0], // 8
+      [200, 0, 0],
+      [225, 0, 0],
+      [250, 25, 0],
 
-    [250, 50, 0], // 12
-    [250, 75, 0],
-    [250, 100, 0],
-    [250, 125, 0],
+      [250, 50, 0], // 12
+      [250, 75, 0],
+      [250, 100, 0],
+      [250, 125, 0],
 
-    [250, 150, 0], // 16
-    [250, 175, 0],
-    [250, 200, 0],
-    [250, 225, 0],
+      [250, 150, 0], // 16
+      [250, 175, 0],
+      [250, 200, 0],
+      [250, 225, 0],
 
-    [250, 250, 0], // 20
-    [250, 250, 25],
-    [255, 255, 50],
-    [255, 255, 75],
+      [250, 250, 0], // 20
+      [250, 250, 25],
+      [255, 255, 50],
+      [255, 255, 75],
 
-    [250, 250, 100], // 24
-    [250, 250, 125],
-    [255, 255, 150],
-    [255, 255, 175],
+      [250, 250, 100], // 24
+      [250, 250, 125],
+      [255, 255, 150],
+      [255, 255, 175],
 
-    [255, 255, 200], // 28
-    [255, 255, 225],
-    [255, 255, 255],
-    [255, 255, 255],
+      [255, 255, 200], // 28
+      [255, 255, 225],
+      [255, 255, 255],
+      [255, 255, 255],
 
-  ]
+    ];
+
+    range02 = [
+      [0, 0, 0],
+      [50, 0, 0],
+      [100, 0, 0],
+      [125, 0, 0],
+      [150, 0, 0],
+      [175, 0, 0],
+      [200, 0, 0],
+      [225, 0, 0],
+      [250, 25, 0],
+      [250, 50, 0],
+      [250, 75, 0],
+      [250, 100, 0],
+      [250, 125, 0],
+      [250, 150, 0],
+      [250, 175, 0],
+      [250, 200, 0],
+      [250, 225, 0],
+      [250, 250, 0],
+      [250, 250, 25],
+      [255, 255, 50],
+      [255, 255, 75],
+      [250, 250, 100],
+      [250, 250, 125],
+      [255, 255, 150],
+      [255, 255, 150],
+      [255, 255, 175],
+      [255, 255, 175],
+      [255, 255, 200],
+      [255, 255, 200],
+      [255, 255, 225],
+      [255, 255, 255],
+      [255, 255, 255],
+
+    ];
+
+    return range02
+  })()
+
+
 );
