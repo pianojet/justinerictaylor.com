@@ -7,10 +7,10 @@ APP2=$BASEAPP/bb8
 
 apache2ctl restart
 
-export NVM_DIR="/root/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+#export NVM_DIR="/root/.nvm"
+#[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
-nvm use v0.10.38
+#nvm use v0.10.38
 
 cd $APP1
 gulp bower

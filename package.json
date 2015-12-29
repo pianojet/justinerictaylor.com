@@ -11,5 +11,8 @@
   "dependencies": {
     "express": "^4.12.4",
     "express-subdomain": "1.0.3"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0"
   }
 }
