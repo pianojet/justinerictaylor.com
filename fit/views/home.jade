@@ -1,23 +1,6 @@
 extends layout
 
 block content
-  h1 BB8
-  div(ng-controller="BB8Controller")
-    p.lead Sound Tests
-    table.table-striped.cell-styling01
-      thead
-        tr
-          th Play
-          th Origin
-          th Notes
-      tbody
-        tr(ng-repeat="sound in bb8sounds track by $index")
-          td(style="text-align: center;")
-            {{sound.label}}
-            audio(src="{{sound.src}}" controls)
-            //- button(ng-click="play($index)").btn.btn-primary Sound {{$index+1}}
-          td
-            {{sound.origin}}
-          td
-            {{sound.notes}}
-
+  h1 Justin's Fit Tracker
+  div(ng-controller="FITController")
+    {{foo}}

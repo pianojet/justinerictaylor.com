@@ -1,9 +1,66 @@
-<html>
+<html ng-app="helloApp">
 <head>
+  <title>Home</title>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <!-- <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.20/angular.min.js"></script> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js"></script>
+  <!-- <script src="ui-bootstrap-tpls-0.9.0.min.js"></script> -->
+  <script>
+    var helloApp = angular.module( "helloApp", ['ui.bootstrap'] );
+    helloApp.controller( "HelloCtrl", [ '$scope', function($scope) {
+      //$scope.name = "calvin hobbes";
+    }]);
+  </script>
+  <style>
+    body {background-color: #ccdddd;}
+    .page-header {margin-left: 50px;}
+    .page-content-container {margin: auto; text-align: center;}
+    .page-content {text-align: left; margin: auto; width: 750px;}
+    .site-link {text-align: center;}
+    .site-desc {text-align: left;}
+    .site-desc p {vertical-align: middle; line-height: 35px;}
+
+  </style>
+
 </head>
-<body>
-    <a href="http://led.justinerictaylor.com">Arduino LED Fire</a>
-  <br />
-    <a href="http://bb8.justinerictaylor.com">BB8 Tests</a>
+ 
+<body ng-controller="HelloCtrl">
+  <div class="page-header">
+    <h1>Navigate</h1>
+  </div>
+  <div class="page-content-container">
+    <div class="page-content">
+      <div class="row">
+        <div class="col-md-3 site-link">
+          <a href="http://fit.justinerictaylor.com/" class="btn btn-primary">Getting FIT</a>
+        </div>
+        <div class="col-md-9 site-desc">
+          <p>Some fitness tracking and accountability.</p>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-md-3 site-link">
+          <a href="http://led.justinerictaylor.com/" class="btn btn-primary">LED Fire</a>
+        </div>
+        <div class="col-md-9 site-desc">
+          <p>Old logic and config experimentation for an LED fire project.</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3 site-link">
+          <a href="http://bb8.justinerictaylor.com/" class="btn btn-primary">BB8 Sounds</a>
+        </div>
+        <div class="col-md-9 site-desc">
+          <p>Experimentation and demo for bb8 sound replication.</p>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
 </body>
 </html>
