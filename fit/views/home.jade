@@ -3,4 +3,41 @@ extends layout
 block content
   h1 Justin's Fit Tracker
   div(ng-controller="FITController")
-    {{foo}}
+    .page-content-container
+      .page-content
+        .row
+          .col-md-5
+            .row
+              .col-md-3
+                button.btn.btn-primary.floatLeft(ng-click="drawPreviousMonth()") Previous
+              .col-md-6
+                .center.widthFull
+                  p {{monthName}} - {{year}}
+              //- .col-md-2
+              //-   .floatRight
+              //-     p Quick Stat:
+              //- .col-md-2
+              //-   select.floatLeft(ng-options="type for type in statTypes" ng-model="statType")
+              //-     option(value="" disabled) --
+              .col-md-3
+                button.btn.btn-primary.floatRight(ng-click="drawNextMonth()") Next
+          .col-md-7
+            .row
+              .col-md-3
+                a(href="") Calendar Content
+              .col-md-3
+                a(href="") Inspiration
+              .col-md-3
+                a(href="") Video Journal
+              .col-md-3
+                a(href="") FitBit Stats
+        .row
+          .col-md-5
+            .cal-content-container
+              .row
+                .cal-content
+                  #month
+          .col-md-7
+            .row
+              .picture-pane
+                p ::PICTURE (via hover over tab in day)::

@@ -60,6 +60,7 @@ exports.logout = function(req, res) {
  * Signup page.
  */
 exports.getSignup = function(req, res) {
+  console.log("\n\n######## getSignup...");
   if (req.user) return res.redirect('/');
   res.render('account/signup', {
     title: 'Create Account'
@@ -71,14 +72,18 @@ exports.getSignup = function(req, res) {
  * Create a new local account.
  */
 exports.postSignup = function(req, res, next) {
+  console.log("\n\n######## postSignup...");
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('password', 'Password must be at least 4 characters long').len(4);
   req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+
+
 
   var errors = req.validationErrors();
 
   if (errors) {
     req.flash('errors', errors);
+    console.log("\n\n######## signup error!");
     return res.redirect('/signup');
   }
 
