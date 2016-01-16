@@ -1,10 +1,12 @@
 #!/bin/bash
 
 BASEAPP=/root/justinerictaylor.com
-
 APP1=$BASEAPP/led
 APP2=$BASEAPP/bb8
 APP3=$BASEAPP/fit
+
+cd $BASEAPP
+cp $BASEAPP/www/index.html /var/www/justinerictaylor.com/index.html
 
 apache2ctl restart
 
