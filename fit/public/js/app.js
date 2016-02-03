@@ -1,4 +1,4 @@
-//= require lib/lodash/dist/lodash
+//= require vendor/lodash/dist/lodash
 
 angular.module('FITApp',[])
 .controller('FITController', ['$scope', '$timeout', 'fitDataService', function($scope, $timeout, fitDataService) {
