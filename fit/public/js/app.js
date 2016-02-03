@@ -4,7 +4,8 @@ angular.module('FITApp',[])
 .controller('FITController', ['$scope', '$timeout', 'fitDataService', function($scope, $timeout, fitDataService) {
   console.log("######## app.js/FITController");
 
-  var jsonIndex = {}
+  var jsonIndex = {};
+  var c = null;
 
   refreshBindings = function() {
     $scope.monthName = c.getMonthName();
@@ -52,7 +53,7 @@ angular.module('FITApp',[])
     console.log("calling getData...");
     getData.then(function(){
       console.log("then of getData...");
-      var c = new Calendar("month", calOpts);
+      c = new Calendar("month", calOpts);
       c.drawCurrent();
       refreshBindings();      
     })
