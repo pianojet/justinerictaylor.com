@@ -7,5 +7,5 @@ gulp.task('default', function() {
 
 gulp.task('bower', function() {
   return bower()
-    .pipe(gulp.dest('public/js/lib/'))
+    .pipe(gulp.dest('public/js/vendor/'))
 });
