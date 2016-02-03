@@ -25,4 +25,4 @@ node app.js > $BASEAPP/bb8.log 2> $BASEAPP/bb8.log &
 
 cd $APP3
 gulp bower
-node app.js > $BASEAPP/fit.log 2> $BASEAPP/fit.log &
+node fit_app.js > $BASEAPP/fit.log 2> $BASEAPP/fit.log &
